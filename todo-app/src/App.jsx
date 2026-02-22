@@ -9,6 +9,7 @@ import { TodoInput } from "./components/TodoInput"
 
 
 
+
 function App() {
     // const todos = [
     //     {input: "complet4ed1", complete: true},
@@ -22,24 +23,21 @@ function App() {
     const [selectedTab, setSelectedTab] = useState('All');
 
     function handleAddTodo(newTodo) {
-        const newTodoList = [...todos, { input: newTodo, complete: false }]
-        setTodos(newTodoList)
-
+        setTodos(prev => [
+         ...prev,
+        { id: crypto.randomUUID(), input: newTodo, complete: false }
+        ]);
     }
 
-    function handleCompleteTodo(index) {
-        const newTodoList = [...todos]
-        newTodoList[index].complete = true
-        setTodos(newTodoList)
- 
+    function handleCompleteTodo(id) {
+        setTodos(prev =>
+        prev.map(todo => todo.id === id ? { ...todo, complete: true } : todo)
+    );
     }
 
-    function handleDeleteTodo(index) {
-        const newTodoList = todos.filter((val, valIndex) => {
-            return valIndex !== index
-        })
-        setTodos(newTodoList)
-    }
+function handleDeleteTodo(id) {
+  setTodos(prev => prev.filter(todo => todo.id !== id));
+}
     
     return (
         <>

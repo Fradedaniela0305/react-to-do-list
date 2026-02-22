@@ -19,26 +19,40 @@ function App() {
 
     const [todos, setTodos] = useState([]) // react hook
 
-    function handeAddTodo(newTodo) {
-        const newTodoList = [...todos, { input: newTodo, complete: false }]
+    const [selectedTab, setSelectedTab] = useState('All');
+
+
+
+    function handleCompleteTodo(index) {
+        const newTodoList = [...todos]
+        newTodoList[index].complete = true
         setTodos(newTodoList)
-
+ 
     }
 
-    function handleEditTodo() {
-
-    }
-
-    function handleDeleteTodo() {
-
+    function handleDeleteTodo(index) {
+        const newTodoList = todos.filter((val, valIndex) => {
+            return valIndex !== index
+        })
+        setTodos(newTodoList)
     }
     
     return (
         <>
             <Header todos={todos}/>
-            <Tabs todos={todos}/>
-            <TodoList todos={todos}/>
-            <TodoInput handeAddTodo={handleAddTodo}/>
+            <Tabs 
+                selectedTab={selectedTab} 
+                setSelectedTab={setSelectedTab} 
+                todos={todos}
+            />
+            <TodoList 
+                selectedTab={selectedTab} 
+                setSelectedTab={setSelectedTab} 
+                todos={todos}
+                handleDeleteTodo={handleDeleteTodo}
+                handleCompleteTodo={handleCompleteTodo}
+            />
+            <TodoInput handleAddTodo={handleAddTodo}/>
         </>
     )
 }

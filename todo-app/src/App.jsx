@@ -1,4 +1,4 @@
-import { useState } from 'react'
+
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import { Header } from "./components/Header"
@@ -6,6 +6,7 @@ import { Tabs } from "./components/Tabs"
 import { TodoList } from "./components/TodoList"
 import { TodoInput } from "./components/TodoInput"
 
+import { useState, useEffect } from 'react'
 
 
 
@@ -22,22 +23,45 @@ function App() {
 
     const [selectedTab, setSelectedTab] = useState('All');
 
-    function handleAddTodo(newTodo) {
-        setTodos(prev => [
-         ...prev,
-        { id: crypto.randomUUID(), input: newTodo, complete: false }
-        ]);
-    }
+function handleAddTodo(newTodo) {
+  const newTodos = [
+    ...todos,
+    { id: crypto.randomUUID(), input: newTodo, complete: false }
+  ];
 
-    function handleCompleteTodo(id) {
-        setTodos(prev =>
-        prev.map(todo => todo.id === id ? { ...todo, complete: true } : todo)
-    );
-    }
+  setTodos(newTodos);
+  handleSave(newTodos);
+}
+
+function handleCompleteTodo(id) {
+  const newTodos = todos.map(todo =>
+    todo.id === id ? { ...todo, complete: true } : todo
+  );
+
+  setTodos(newTodos);
+  handleSave(newTodos);
+}
 
 function handleDeleteTodo(id) {
-  setTodos(prev => prev.filter(todo => todo.id !== id));
+  const newTodos = todos.filter(todo => todo.id !== id);
+
+  setTodos(newTodos);
+  handleSave(newTodos);
 }
+
+function handleSave(currTodos) {
+  localStorage.setItem('todo-app', JSON.stringify({ todos: currTodos }));
+}
+
+    useEffect(() => {
+        if (!localStorage) {return}
+        let db = []
+        if (localStorage.getItem('todo-app')) {
+            db = JSON.parse(localStorage.getItem('todo-app'))
+            setTodos(db.todos)
+        }
+    }, [])
+
     
     return (
         <>

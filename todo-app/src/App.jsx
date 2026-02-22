@@ -21,7 +21,11 @@ function App() {
 
     const [selectedTab, setSelectedTab] = useState('All');
 
+    function handleAddTodo(newTodo) {
+        const newTodoList = [...todos, { input: newTodo, complete: false }]
+        setTodos(newTodoList)
 
+    }
 
     function handleCompleteTodo(index) {
         const newTodoList = [...todos]
